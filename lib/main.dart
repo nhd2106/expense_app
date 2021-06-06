@@ -14,11 +14,23 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Expense App',
+      title: 'Personnal Expenses',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+          primarySwatch: Colors.blue,
+          accentColor: Colors.amber,
+          fontFamily: 'Quicksand',
+          textTheme: ThemeData.light().textTheme.copyWith(
+              title: TextStyle(
+                  fontFamily: 'OpenSans',
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18)),
+          appBarTheme: AppBarTheme(
+              textTheme: ThemeData.light().textTheme.copyWith(
+                  title: TextStyle(
+                      fontFamily: 'OpenSans',
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold)))),
+      home: MyHomePage(title: 'Personnal Expenses'),
     );
   }
 }
@@ -35,9 +47,9 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   // String titleInput;
   // String amountInput;
-   final List<Transaction> _userTransaction = [
-    Transaction(title: 'shoe', id: 't1', amount: 69.99, date: DateTime.now()),
-    Transaction(title: 'shoe2', id: 't2', amount: 39.99, date: DateTime.now())
+  final List<Transaction> _userTransaction = [
+    // Transaction(title: 'shoe', id: 't1', amount: 69.99, date: DateTime.now()),
+    // Transaction(title: 'shoe2', id: 't2', amount: 39.99, date: DateTime.now())
   ];
   void _addNewTransaction(String txTitle, double txAmount) {
     final newTx = Transaction(
@@ -49,10 +61,17 @@ class _MyHomePageState extends State<MyHomePage> {
       _userTransaction.add(newTx);
     });
   }
+
   void _startAddNewTransaction(BuildContext ctx) {
-    showModalBottomSheet(context: ctx, builder: (_) {
-      return NewTransaction(_addNewTransaction(txTitle, txAmount))
-    });
+    showModalBottomSheet(
+        context: ctx,
+        builder: (_) {
+          return GestureDetector(
+            child: NewTransaction(_addNewTransaction),
+            onTap: () {},
+            behavior: HitTestBehavior.opaque,
+          );
+        });
   }
 
   @override
@@ -68,7 +87,11 @@ class _MyHomePageState extends State<MyHomePage> {
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
-        actions: [IconButton(onPressed: () => _startAddNewTransaction(context), icon: Icon(Icons.add))],
+        actions: [
+          IconButton(
+              onPressed: () => _startAddNewTransaction(context),
+              icon: Icon(Icons.add))
+        ],
       ),
       body: SingleChildScrollView(
         child: Column(
