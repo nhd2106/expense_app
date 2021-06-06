@@ -1,4 +1,8 @@
-import 'package:expense_app/widgets/user_transaction.dart';
+import './widgets/transaction_list.dart';
+
+import './models/transaction.dart';
+
+import './widgets/new_transaction.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -31,6 +35,25 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   // String titleInput;
   // String amountInput;
+   final List<Transaction> _userTransaction = [
+    Transaction(title: 'shoe', id: 't1', amount: 69.99, date: DateTime.now()),
+    Transaction(title: 'shoe2', id: 't2', amount: 39.99, date: DateTime.now())
+  ];
+  void _addNewTransaction(String txTitle, double txAmount) {
+    final newTx = Transaction(
+        title: txTitle,
+        id: DateTime.now().toString(),
+        amount: txAmount,
+        date: DateTime.now());
+    setState(() {
+      _userTransaction.add(newTx);
+    });
+  }
+  void _startAddNewTransaction(BuildContext ctx) {
+    showModalBottomSheet(context: ctx, builder: (_) {
+      return NewTransaction(_addNewTransaction(txTitle, txAmount))
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,27 +64,34 @@ class _MyHomePageState extends State<MyHomePage> {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
     return Scaffold(
-        appBar: AppBar(
-          // Here we take the value from the MyHomePage object that was created by
-          // the App.build method, and use it to set our appbar title.
-          title: Text(widget.title),
-        ),
-        body: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              Container(
-                width: double.infinity,
-                child: Card(
-                  child: Text('Chart'),
-                  elevation: 5,
-                  color: Colors.green.shade100,
-                ),
+      appBar: AppBar(
+        // Here we take the value from the MyHomePage object that was created by
+        // the App.build method, and use it to set our appbar title.
+        title: Text(widget.title),
+        actions: [IconButton(onPressed: () => _startAddNewTransaction(context), icon: Icon(Icons.add))],
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            Container(
+              width: double.infinity,
+              child: Card(
+                child: Text('Chart'),
+                elevation: 5,
+                color: Colors.green.shade100,
               ),
-              UserTransaction()
-            ],
-          ),
-        ));
+            ),
+            TransactionList(_userTransaction)
+          ],
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: () => _startAddNewTransaction(context),
+      ),
+    );
   }
 }
