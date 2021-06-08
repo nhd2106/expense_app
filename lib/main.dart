@@ -16,10 +16,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Personnal Expenses',
+      title: 'Được Buy Coin App',
       theme: ThemeData(
           primarySwatch: Colors.blue,
           accentColor: Colors.amber,
+          errorColor: Colors.red[400],
           fontFamily: 'Quicksand',
           textTheme: ThemeData.light().textTheme.copyWith(
               title: TextStyle(
@@ -32,7 +33,7 @@ class MyApp extends StatelessWidget {
                       fontFamily: 'OpenSans',
                       fontSize: 20,
                       fontWeight: FontWeight.bold)))),
-      home: MyHomePage(title: 'Personnal Expenses'),
+      home: MyHomePage(title: 'Được Buy Coin App'),
     );
   }
 }
@@ -59,12 +60,13 @@ class _MyHomePageState extends State<MyHomePage> {
     }).toList();
   }
 
-  void _addNewTransaction(String txTitle, double txAmount) {
+  void _addNewTransaction(
+      String txTitle, double txAmount, DateTime chosenDate) {
     final newTx = Transaction(
         title: txTitle,
         id: DateTime.now().toString(),
         amount: txAmount,
-        date: DateTime.now());
+        date: chosenDate);
     setState(() {
       _userTransaction.add(newTx);
     });
@@ -80,6 +82,12 @@ class _MyHomePageState extends State<MyHomePage> {
             behavior: HitTestBehavior.opaque,
           );
         });
+  }
+
+  void _deleteTransaction(String id) {
+    setState(() {
+      _userTransaction.removeWhere((element) => element.id == id);
+    });
   }
 
   @override
@@ -107,7 +115,7 @@ class _MyHomePageState extends State<MyHomePage> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             Chart(_recentTransactions),
-            TransactionList(_userTransaction)
+            TransactionList(_userTransaction, _deleteTransaction)
           ],
         ),
       ),
