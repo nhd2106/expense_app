@@ -1,5 +1,3 @@
-import 'dart:io' show Platform;
-
 import 'package:expense_app/widgets/adaptive_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -78,7 +76,7 @@ class _NewTransactionState extends State<NewTransaction> {
                         ? 'No Date Chosen!'
                         : DateFormat('dd/MM/yyy')
                             .format(_selectedDate as DateTime)),
-                    AdaptiveButton('Choose date', _presentDatePicker)
+                    AdaptiveButton('Choose date', _presentDatePicker) 
                   ],
                 ),
               ),
